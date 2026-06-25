@@ -79,29 +79,44 @@ pnpm tsx cajero.ts
 ```
 
 ---
+## Estrategia de prueba
 
-## 💻 Ejemplo de uso
+Se realizaron pruebas manuales en consola validando los siguientes escenarios:
 
-```text
-=== CAJERO AUTOMÁTICO QAX ===
+### ✔ Pruebas funcionales
+- Registro exitoso de cuentas válidas.
+- Validación de cuentas duplicadas.
+- Validación de número de cuenta (4 dígitos).
+- Consulta de saldo.
+- Depósitos exitosos.
+- Retiros exitosos.
 
-Número de cuenta (4 dígitos): 1234
-Nombre del titular: Juan Pérez
-Saldo inicial: 5000
-
-✔ Cuenta registrada
-
-=== MENÚ CAJERO ===
-
-1. Consultar saldo
-2. Depositar
-3. Retirar
-000. Salir
-```
+### ❌ Pruebas negativas
+- Ingreso de cuentas con menos o más de 4 dígitos.
+- Intento de registrar cuentas duplicadas.
+- Retiro mayor al saldo disponible.
+- Retiro mayor a $10,000.
+- Depósitos con valores inválidos (0 o negativos).
+- Opciones inválidas en el menú.
 
 ---
+## 📊 Datos de prueba
 
-## 📊 Resumen Final
+### Cuentas registradas
+
+| Número | Titular      | Saldo inicial |
+|--------|--------------|---------------|
+| 0101   | Iker         | 17000         |
+| 0202   | Juan Perez   | 55000         |
+
+### Operaciones realizadas
+
+- Depósito: 1250 a cuenta 0101
+- Retiro: 5630 de cuenta 0202
+- Retiro: 1000 de cuenta 0101
+
+---
+##  Resumen Final
 
 Al finalizar la ejecución, el sistema muestra:
 

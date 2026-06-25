@@ -11,7 +11,14 @@ interface Cuenta {
   saldo: number;
 }
 
+interface Transaccion{
+    numeroCuenta: string;
+    tipo: 'DEPOSITO' | 'RETIRO';
+    monto: number;
+}
+
 const cuentas: Cuenta[] = [];
+const transacciones: Transaccion[] = [];
 
 function preguntar(pregunta: string): Promise<string> {
   return new Promise((resolve) => {
@@ -99,6 +106,13 @@ async function main() {
 
             if(dep>0){
                 cuenta.saldo +=dep;
+
+                transacciones.push({
+                    numeroCuenta: cuenta.numero,
+                    tipo: 'DEPOSITO',
+                    monto: dep
+                });
+
                 console.log('✅ Deposito exitoso');
             }else{
                 console.log('❌ Monto invalido');
@@ -118,6 +132,12 @@ async function main() {
             }
             else{
                 cuenta.saldo -= ret;
+
+                transacciones.push({
+                    numeroCuenta: cuenta.numero,
+                    tipo: 'RETIRO',
+                    monto: ret
+                })
                 console.log('✅ Retiro exitoso');
             }
             break;
@@ -125,8 +145,9 @@ async function main() {
             default: console.log('❌Opción invaida');
     }
     console.log();
-     
-     // RESUMEN
+  }
+
+    // RESUMEN
 
 
      console.log('===RESUMEN===');
@@ -137,8 +158,14 @@ async function main() {
         total += c.saldo;
      }
      console.log(`\nTotal General: $${total}\n`);
-
-  }
+     console.log('===TRANSACCIONES REALIZADAS===');
+     if(transacciones.length===0){
+        console.log('No se realizaron transacciones');
+     }else{
+        for(const t of transacciones){
+            console.log(`Cuenta: ${t.numeroCuenta} | Tipo: ${t.tipo} | Monto: $${t.monto}`);
+        }
+     }
 
   rl.close();
 }
