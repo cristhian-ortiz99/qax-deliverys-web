@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Solicitud de credito - QAX PayLater', ()=>{
 
     test.beforeEach(async ({page}) =>{
-        await page.goto('https://qaxpert.com/lab/sites/stage-3/paylater/index.html');
+        await page.goto('index.html');
     });
 
     async function completarFormulario(page:any) {
@@ -21,9 +21,7 @@ test.describe('Solicitud de credito - QAX PayLater', ()=>{
     test('CP01 - Validar que el título de la página contenga "QAX PayLater"', async ({page}) => {
 
         await test.step('Given que el usuario ingresa a la pagina principal', async() => {
-            const titulo = await page.title();
-
-            expect(titulo).toContain('PayLater');
+            await expect(page).toHaveTitle(/PayLater/);
         });
     });
 
@@ -43,20 +41,32 @@ test.describe('Solicitud de credito - QAX PayLater', ()=>{
         });
     });
 
-    test('CP03-CP04 - Validar que el botón de acción esté deshabilitado inicialmente - no está deshabilitado por defecto', async ({page}) => {
+    test('CP03 - Validar que el botón de acción esté deshabilitado inicialmente', async ({page}) => {
 
         await test.step('Given que el usuario ingresa al formulario', async() => {
             
             await page.getByRole('link',{name: "Solicitar Ahora"}).click();
 
         });
-        await test.step('Then se valida que los campos sean editables ', async() => {
+        await test.step('Then se valida que el boton de accion se encuentre deshabilitado ', async() => {
 
             await expect(page.getByLabel(/Nombres/i)).toBeEditable();
             await expect(page.getByLabel(/Apellidos/i)).toBeEditable();
-            await expect(page.getByLabel(/Numero Documento/i)).toBeEditable();
-            await expect(page.getByLabel(/Correo Electronico/i)).toBeEditable();
-            await expect(page.getByLabel(/Ingreso Mensual/i)).toBeEditable();
+            await expect(page.getByRole('button',{name : /Continuar/i})).toBeDisabled();
+            
+        });
+    });
+
+    test('CP04 - Validar que al llenar los campos obligatorios, el botón se habilite', async ({page}) => {
+
+        await test.step('Given que el usuario ingresa al formulario', async() => {
+            
+            await page.getByRole('link',{name: "Solicitar Ahora"}).click();
+
+        });
+        await test.step('Then se llena los campos y el boton se habilita', async() => {
+
+            await completarFormulario(page);
             await expect(page.getByRole('button',{name : /Continuar/i})).toBeEnabled();
             
         });
@@ -78,7 +88,9 @@ test.describe('Solicitud de credito - QAX PayLater', ()=>{
         await test.step('Then se visualiza el mensaje de confirmación', async() => {
 
             const toast = page.locator('.toast');
-            await expect(toast).toBeVisible();
+            await expect.soft(toast).toBeVisible();
+            await expect.soft(toast).toContainText('Datos guardados correctamente');
+            await expect.soft(page).toHaveURL(/apply-step2\.html/);
         });
     });
 
@@ -97,8 +109,7 @@ test.describe('Solicitud de credito - QAX PayLater', ()=>{
         });
         await test.step('Then el mensaje de confirmación contiene el texto esperado', async() => {
 
-            await expect(page.locator('.toast')).toContainText('Datos guardados correctamente');
-            await expect(page).toHaveURL(/apply-step2\.html/);
+            await expect.soft(page.locator('.toast')).toContainText('Datos guardados correctamente');
         });
     });
     test('CP07 - Validar que un campo de entrada mantenga el valor ingresado', async ({page}) => {
@@ -120,6 +131,20 @@ test.describe('Solicitud de credito - QAX PayLater', ()=>{
             expect.soft(await page.getByLabel(/Direccion/i).inputValue()).toBe('Arenales');
         });
         
+    });
+
+    test('CP08 - Validar que un campo sea editable', async ({page}) => {
+
+        await test.step('Given que el usuario ingresa al formulario', async() => {
+            
+            await page.getByRole('link',{name: "Solicitar Ahora"}).click();
+
+        });
+        await test.step('Then se valida que los campos son editables', async() => {
+
+            await expect(page.getByLabel(/Nombres/i)).toBeEditable();
+            await expect(page.getByLabel(/Apellidos/i)).toBeEditable(); 
+        });
     });
 
     test('CP09 - Validar que el campo Ingreso Mensual acepte formato numérico', async ({page}) => {
@@ -150,7 +175,7 @@ test.describe('Solicitud de credito - QAX PayLater', ()=>{
         });
         
         await test.step('Then se muestra el borde rojo', async() => {
-            //
+            await expect(page.getByLabel(/Nombres/i)).toHaveCSS('border-color','rgb(255, 0, 0)');
         });
     });
 
