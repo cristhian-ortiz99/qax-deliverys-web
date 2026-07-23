@@ -1,0 +1,23 @@
+{
+  "name": "qax-pw-st4-exe2",
+  "version": "1.0.0",
+  "description": "Proyecto integrador API + Web con Playwright — SUT QAXadmin",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:report": "npx playwright show-report",
+    "test:chrome": "playwright test --project=\"Desktop Chrome\"",
+    "test:firefox": "playwright test --project=\"Firefox\"",
+    "test:mobile": "playwright test --project=\"Android\"",
+    "test:iphone": "playwright test --project=\"Mobile Safari\"",
+    "test:tablet": "playwright test --project=\"Tablet\"",
+    "test:all": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}
