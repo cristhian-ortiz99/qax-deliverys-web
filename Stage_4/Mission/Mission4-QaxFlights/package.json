@@ -1,0 +1,34 @@
+{
+  "name": "Mission4-QaxFlights",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:chrome": "playwright test --project=\"Desktop Chrome\"",
+    "test:pixel": "playwright test --project=\"Pixel 7\"",
+    "test:ipad": "playwright test --project=\"iPad Mini\"",
+    "test:iphone": "playwright test --project=\"iPhone 14\"",
+    "test:all": "playwright test",
+    "report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.12.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "dependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "@playwright/test": "^1.61.1",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1"
+  }
+}
